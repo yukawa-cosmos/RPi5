@@ -1,0 +1,10 @@
+# ラズパイ用（mediapipe/deepface 除外・Python 3.13 対応）
+# opencv は apt install python3-opencv 推奨
+websockets>=12.0
+aiohttp
+numpy
+sounddevice>=0.4.0
+soundfile>=0.12.0
+python-dotenv==1.2.2
+psutil
+pyzbar
