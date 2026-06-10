@@ -8,76 +8,89 @@
 
 ## 事前確認（必ず読む）
 
-### ラズパイの IP アドレスを確認する
-
-mDNS（`cosmos-robot.local` 等のホスト名）は環境によって使えない。  
-**必ず IP アドレスで作業すること。**
-
-ラズパイにモニター・キーボードを接続して：
-
-```bash
-hostname -I
-```
-
-表示された IP アドレス（例: `192.168.50.176`）を手元に控える。
-
 ### コマンドはすべて PC のターミナルで実行する
 
 SSH 接続中のラズパイ側で実行するとエラーになるコマンドが多い。  
 **プロンプトが `offic@CTS-074` であることを確認してから各コマンドを実行すること。**
 
----
+### ラズパイの IP アドレスを使う
 
-## 手順
+ホスト名（`cosmos-robot.local` 等）は環境によって使えない。  
+**必ず IP アドレスで作業すること。**
 
-### 1. SSH 接続を確認する
+ラズパイにモニター・キーボードを接続して確認：
 
 ```bash
-ssh pi@<IPアドレス>
+hostname -I
 ```
 
-ログインできれば OK。確認後 `exit` で PC に戻る。
-
 ---
 
-### 2. ファイルをラズパイに転送する
+## 初回セットアップ
 
-git clone はラズパイから GitHub に接続できないため使わない。rsync で転送する。
+### 1. ファイルをラズパイに転送する
+
+**PC のターミナル**で実行：
 
 ```bash
-rsync -av /home/offic/RPi5/ pi@<IPアドレス>:/home/pi/cosmos-robot/
+PI_HOST=pi@<IPアドレス> bash deploy/deploy.sh
 ```
 
-ファイル一覧が流れれば成功。
+ファイル転送とサービス再起動が自動で行われる。
+
+> 初回は systemd サービスがないためサービス再起動でエラーになるが無視してよい。
 
 ---
 
-### 3. セットアップスクリプトを実行する
+### 2. セットアップスクリプトを実行する
 
-`sudo` を使うため `-t` オプションが必須。**`-t` を忘れるとパスワード入力に失敗してインストールが止まる。**
+`-t` オプション必須（sudo がパスワードを求めるため）：
 
 ```bash
-ssh -t pi@<IPアドレス> "cd /home/pi/cosmos-robot && bash install.sh"
+ssh -t pi@<IPアドレス> "cd /home/pi/cosmos-robot && bash deploy/install.sh"
 ```
 
 完了すると以下が表示される：
 ```
-=== 完了 ===
+=== セットアップ完了 ===
 ```
 
 ---
 
-### 4. API キーを設定する
+### 3. API キーとサーバー URL を設定する
 
 ```bash
-ssh pi@<IPアドレス> "echo 'PIPPI_API_KEY=<APIキー>' > /home/pi/cosmos-robot/.env"
+ssh pi@<IPアドレス> "cat > /home/pi/cosmos-robot/.env" << 'EOF'
+PIPPI_API_KEY=<APIキー>
+GYOMU_WS_URL=ws://<サーバーIPアドレス>:8001/ws/robot
+EOF
 ```
-
-`<APIキー>` は管理者から受け取った値に置き換える。
 
 ---
 
-### 5. カメラ動作確認
+### 4. 起動確認
+
+```bash
+ssh pi@<IPアドレス> "sudo systemctl start pippi-robot && sudo systemctl status pippi-robot"
+```
+
+`active (running)` と表示されれば完了。以後は電源を入れると自動起動する。
+
+---
+
+## コード更新（2回目以降）
+
+**PC のターミナル**で：
+
+```bash
+PI_HOST=pi@<IPアドレス> bash deploy/deploy.sh
+```
+
+これだけでファイル転送とサービス再起動が完了する。
+
+---
+
+## カメラ動作確認
 
 ```bash
 ssh -t pi@<IPアドレス> "cd /home/pi/cosmos-robot && source .venv/bin/activate && python3 check_cameras.py"
@@ -86,14 +99,4 @@ ssh -t pi@<IPアドレス> "cd /home/pi/cosmos-robot && source .venv/bin/activat
 以下のような出力が出れば正常：
 ```
 使えるカメラ: インデックス [0, 2, 3, 4]
-```
-
-カメラが1台も表示されない場合はカメラの接続を確認する。
-
----
-
-### 6. 起動コマンド
-
-```bash
-ssh -t pi@<IPアドレス> "cd /home/pi/cosmos-robot && source .venv/bin/activate && python3 pippi_client/access.py --detector mediapipe --camera 0"
 ```
