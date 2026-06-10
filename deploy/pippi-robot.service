@@ -1,0 +1,20 @@
+[Unit]
+Description=ぴっぴ ロボット会話ループ（カメラ＋音声）
+After=network-online.target sound.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/home/pi/cosmos-robot
+ExecStart=/home/pi/cosmos-robot/deploy/start_robot.sh
+Restart=always
+RestartSec=10
+# 5分以内に5回落ちたら異常とみなして停止
+StartLimitIntervalSec=300
+StartLimitBurst=5
+# .env から GYOMU_WS_URL などを読み込む（ファイルがなくてもエラーにしない）
+EnvironmentFile=-/home/pi/cosmos-robot/.env
+
+[Install]
+WantedBy=multi-user.target
