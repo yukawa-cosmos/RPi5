@@ -54,10 +54,7 @@ ssh -t pi@<ラズパイのIP> "cd /home/pi/cosmos-robot && bash deploy/install.s
 ### 3. API キーとサーバー URL を設定する
 
 ```bash
-ssh pi@<ラズパイのIP> "cat > /home/pi/cosmos-robot/.env << 'EOF'
-PIPPI_API_KEY=GvUzCBLHj0bgUqogEWuKv-NxO3LSYjxW9sKHHXWRGpU
-GYOMU_WS_URL=ws://<PCのIP>:8001/ws/robot
-EOF"
+ssh pi@<ラズパイのIP> "printf 'PIPPI_API_KEY=GvUzCBLHj0bgUqogEWuKv-NxO3LSYjxW9sKHHXWRGpU\nGYOMU_WS_URL=ws://<PCのIP>:8001/ws/robot\n' > /home/pi/cosmos-robot/.env"
 ```
 
 ---
@@ -85,7 +82,7 @@ PI_HOST=pi@<ラズパイのIP> bash /home/offic/cosmos-robot_/cosmos-robot/deplo
 ## カメラ動作確認
 
 ```bash
-ssh -t pi@<ラズパイのIP> "cd /home/pi/cosmos-robot && source .venv/bin/activate && python3 check_cameras.py"
+ssh -t pi@<ラズパイのIP> "cd /home/pi/cosmos-robot && source .venv/bin/activate && python3 client/check_cameras.py"
 ```
 
 `使えるカメラ: インデックス [0, 2, 3, 4]` と表示されれば正常。
