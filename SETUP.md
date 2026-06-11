@@ -56,7 +56,7 @@ ssh -t pi@<ラズパイのIP> "cd /home/pi/cosmos-robot && bash deploy/install.s
 ```bash
 ssh pi@<ラズパイのIP> "cat > /home/pi/cosmos-robot/.env << 'EOF'
 PIPPI_API_KEY=GvUzCBLHj0bgUqogEWuKv-NxO3LSYjxW9sKHHXWRGpU
-GYOMU_WS_URL=ws://<PCのIP>:8091/ws/robot
+GYOMU_WS_URL=ws://<PCのIP>:8001/ws/robot
 EOF"
 ```
 
