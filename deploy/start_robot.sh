@@ -8,8 +8,7 @@ PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 VENV_PYTHON="$PROJECT_DIR/.venv/bin/python"
 [ -x "$VENV_PYTHON" ] || VENV_PYTHON="$PROJECT_DIR/venv/bin/python"
 [ -x "$VENV_PYTHON" ] || VENV_PYTHON="python3"
-# クライアントコードは client/（pippi_client パッケージ）
-WORKDIR="$PROJECT_DIR/client"
+WORKDIR="$PROJECT_DIR"
 
 # GYOMU_URL から接続先 host:port を抽出 (ws://host:port/path → host port)
 # wss:// を先に除去しないと ws:// 除去で "s://..." が残るバグになる
