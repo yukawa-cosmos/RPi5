@@ -15,16 +15,5 @@ python-dotenv==1.2.2
 psutil
 
 # --- カメラ・QR ---
-opencv-python            # ラズパイは apt: python3-opencv でも可
+# opencv は apt install python3-opencv で入れる（install.sh で対応済み）
 pyzbar                   # QRコードのデコード
-
-# --- 人物/顔の「検知」（任意・--detector mediapipe を使う場合）---
-mediapipe>=0.10.0
-
-# --- スタッフ顔「照合」をローカル実行する場合（設計上の決定 C）---
-#   deepface は tensorflow を引き込むため重い。スタッフ即応挨拶が不要なら外してよい。
-#   （来訪者照合は常にクラウド側。staff_embeddings.json はクラウドから同期する）
-deepface>=0.0.93
-
-# --- ラズパイで PIR / 超音波センサーを使う場合（apt: python3-rpi.gpio 推奨）---
-# RPi.GPIO

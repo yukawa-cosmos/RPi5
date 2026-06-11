@@ -35,7 +35,7 @@ echo "[3/4] 環境変数ファイルを確認..."
 if [ ! -f "$INSTALL_DIR/.env" ]; then
   cp "$INSTALL_DIR/.env.example" "$INSTALL_DIR/.env"
   echo "  .env を作成しました。以下を設定してください:"
-  echo "  GYOMU_WS_URL=ws://<サーバーIPアドレス>:8001/ws/robot"
+  echo "  GYOMU_WS_URL=ws://<サーバーIPアドレス>:8091/ws/robot"
 else
   echo "  .env は既に存在します。"
 fi
@@ -53,7 +53,7 @@ echo "=== セットアップ完了 ==="
 echo ""
 echo "次の手順:"
 echo "  1. .env を編集: nano $INSTALL_DIR/.env"
-echo "     └ GYOMU_WS_URL=ws://<サーバーIPアドレス>:8001/ws/robot"
+echo "     └ GYOMU_WS_URL=ws://<サーバーIPアドレス>:8091/ws/robot"
 echo "     └ PIPPI_API_KEY=<管理画面 → 設定タブ → APIキー欄の値>"
 echo "  2. 起動: sudo systemctl start $SERVICE_NAME"
 echo "  3. 確認: sudo systemctl status $SERVICE_NAME"
